@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Usuarios y Pagos Mensuales</title>
+    <style>
+        .pendiente {
+            color: red;
+            font-weight: bold;
+        }
+        .pagado {
+            color: green;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 5px 10px;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <h1>Usuarios y Pagos Mensuales</h1>
+
+    <h:dataTable value="#{helloBean.usuarios}" var="usuario" border="1" style="margin-bottom:30px;">
+        <h:column>
+            <f:facet name="header">Nombre</f:facet>
+            #{usuario.nombre} #{usuario.apellidos}
+        </h:column>
+        <h:column>
+            <f:facet name="header">DNI</f:facet>
+            #{usuario.dni}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Email</f:facet>
+            #{usuario.email}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Edad</f:facet>
+            #{usuario.edad}
+        </h:column>
+
+        <!-- Pagos mensuales -->
+        <h:column>
+            <f:facet name="header">Pagos</f:facet>
+            <h:dataTable value="#{usuario.pagos}" var="pago">
+                <h:column>
+                    #{pago.key}
+                </h:column>
+                <h:column>
+                    <h:outputText value="#{pago.value != null ? pago.value : 'NO PAGADO'}"
+                                  styleClass="#{pago.value == null ? 'pendiente' : 'pagado'}"/>
+                </h:column>
+            </h:dataTable>
+        </h:column>
+
+        <!-- Total anual y estado -->
+        <h:column>
+            <f:facet name="header">Total / Estado</f:facet>
+            <h:outputText value="Total: #{usuario.totalPagos} €"/>
+            <br/>
+            <h:outputText value="#{usuario.totalPagos < 100 ? 'El usuario no está al día con la cuota' : 'El usuario está al corriente de pagos'}"
+                          styleClass="#{usuario.totalPagos < 100 ? 'pendiente' : 'pagado'}"/>
+        </h:column>
+    </h:dataTable>
+
+</h:body>
+</html>
